@@ -15,6 +15,7 @@ async function bootstrap() {
     'http://localhost:3000',
     'https://cloudinary.com',
     '*',
+    'http://localhost:3000/home',
   ];
   app.enableCors({
     origin: allowedOrigins,
