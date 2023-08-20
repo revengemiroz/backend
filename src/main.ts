@@ -16,6 +16,8 @@ async function bootstrap() {
     'https://cloudinary.com',
     '*',
     'http://localhost:3000/home',
+    'https://client-tau-sand.vercel.app',
+    'https://client-tau-sand.vercel.app/home',
   ];
   app.enableCors({
     origin: allowedOrigins,
