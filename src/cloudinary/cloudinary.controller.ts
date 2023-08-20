@@ -3,6 +3,7 @@ import {
   Post,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -15,11 +16,15 @@ export class CloudinaryController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('image'))
-  async uploadImage(
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<{ url: string }> {
-    console.log('what is file', file);
-    const imageUrl = await this.cloudinaryService.uploadImage(file);
-    return { url: imageUrl };
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    return await this.cloudinaryService
+      .uploadImage(file)
+      .then((res) => {
+        const url = res.url;
+        return { url };
+      })
+      .catch(() => {
+        throw new BadRequestException('Invalid file type.');
+      });
   }
 }

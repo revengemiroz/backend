@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { CloudinaryService } from './cloudinary.service';
 import { CloudinaryController } from './cloudinary.controller';
 
-import { MulterModule } from '@nestjs/platform-express';
+import { CloudinaryProvider } from 'src/cloudinary.provider';
 
 @Module({
-  imports: [MulterModule.register({ dest: './uploads' })],
+  providers: [CloudinaryService, CloudinaryProvider],
   controllers: [CloudinaryController],
-  providers: [CloudinaryService],
+  exports: [CloudinaryProvider, CloudinaryService],
 })
 export class CloudinaryModule {}
