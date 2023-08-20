@@ -9,8 +9,9 @@ async function bootstrap() {
     logger: console,
   });
 
-  const httpServer = http.createServer(app.getHttpAdapter().getInstance());
-  const ioServer = new socketio.Server(httpServer);
+  const apiPort = 4001;
+  const socketIOPort = 4002; // Choose a different port for Socket.IO
+
   const allowedOrigins = [
     'http://localhost:3000',
     'https://cloudinary.com',
@@ -24,8 +25,28 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-  app.useWebSocketAdapter(new IoAdapter(ioServer));
 
-  await app.listen(4000);
+  // Start the NestJS API server
+  await app.listen(apiPort, () => {
+    console.log(`NestJS API server is running on port ${apiPort}`);
+  });
+
+  // Create a separate HTTP server for Socket.IO
+  const httpServer = http.createServer();
+  const io = new socketio.Server(httpServer, {
+    cors: {
+      origin: allowedOrigins,
+      methods: ['GET', 'POST'],
+    },
+  });
+
+  io.on('connection', (socket) => {
+    console.log('A user connected via Socket.IO');
+    // Add your Socket.IO event listeners and logic here
+  });
+
+  httpServer.listen(socketIOPort, () => {
+    console.log(`Socket.IO server is running on port ${socketIOPort}`);
+  });
 }
 bootstrap();
