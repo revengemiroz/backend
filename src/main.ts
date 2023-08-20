@@ -11,7 +11,11 @@ async function bootstrap() {
 
   const httpServer = http.createServer(app.getHttpAdapter().getInstance());
   const ioServer = new socketio.Server(httpServer);
-  const allowedOrigins = ['http://localhost:3000', 'https://cloudinary.com'];
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://cloudinary.com',
+    '*',
+  ];
   app.enableCors({
     origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
