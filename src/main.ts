@@ -18,7 +18,7 @@ async function bootstrap() {
     '*',
     'http://localhost:3000/home',
     'https://client-tau-sand.vercel.app',
-    'https://client-tau-sand.vercel.app/home',
+    'https://client-gizwe4cdh-revengemiroz.vercel.app//home',
   ];
   app.enableCors({
     origin: allowedOrigins,
@@ -45,8 +45,8 @@ async function bootstrap() {
     // Add your Socket.IO event listeners and logic here
   });
 
-  httpServer.listen(socketIOPort, () => {
-    console.log(`Socket.IO server is running on port ${socketIOPort}`);
-  });
+  // httpServer.listen(socketIOPort, () => {
+  //   console.log(`Socket.IO server is running on port ${socketIOPort}`);
+  // });
 }
 bootstrap();

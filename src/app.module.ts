@@ -6,10 +6,10 @@ import { TodoModule } from './todo/todo.module';
 import { UserModule } from './user/user.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CloudinaryProvider } from './cloudinary.provider';
-import { MessagesModule } from './messages/messages.module';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
-  imports: [TodoModule, UserModule, CloudinaryModule, ConfigModule.forRoot(), MessagesModule],
+  imports: [TodoModule, UserModule, CloudinaryModule, GatewayModule],
   controllers: [AppController],
   providers: [AppService, ConfigService, CloudinaryProvider],
 })
