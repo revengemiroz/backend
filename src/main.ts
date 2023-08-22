@@ -9,7 +9,7 @@ async function bootstrap() {
     logger: console,
   });
 
-  const apiPort = 4001;
+  const apiPort = process.env.PORT || 4001;
   const socketIOPort = 4002; // Choose a different port for Socket.IO
 
   const allowedOrigins = [
