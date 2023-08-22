@@ -35,22 +35,22 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Handle received messages and broadcast to other clients
     const userId = this.users.get(client.id);
     console.log('wjhat is payload', payload, userId);
-    if (userId) {
-      if (client.rooms.has(payload.room)) {
-        client
-          .to(payload.room)
-          .emit('messageReceived', { user: userId, text: payload.text });
-      } else {
-        client.emit('error', {
-          message: 'you can only send if u join the room',
-        });
-      }
-    }
+    // if (userId) {
+    this.server.emit('messageReceived', { user: userId, text: payload.text });
+    // if (client.rooms.has(payload.room)) {
+
+    // } else {
+    //   client.emit('error', {
+    //     message: 'you can only send if u join the room',
+    //   });
+    // }
+    // }
   }
 
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, room: string) {
     client.join(room);
+    client.emit('my-id', { userId: client.id });
     console.log('joined room', room);
   }
 
