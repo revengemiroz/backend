@@ -15,12 +15,13 @@ async function bootstrap() {
   const allowedOrigins = [
     'http://localhost:3000',
     'https://cloudinary.com',
-    '*',
     'http://localhost:3000/home',
     'https://client-gizwe4cdh-revengemiroz.vercel.app',
     'https://client-gizwe4cdh-revengemiroz.vercel.app/home',
   ];
   app.enableCors({
+    allowedHeaders: ['content-type'],
+    credentials: true,
     origin: function (origin, callback) {
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
