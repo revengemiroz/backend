@@ -18,6 +18,7 @@ async function bootstrap() {
     'http://localhost:3000/home',
     'https://client-gizwe4cdh-revengemiroz.vercel.app',
     'https://client-gizwe4cdh-revengemiroz.vercel.app/home',
+    'https://backend-4sah.onrender.com',
   ];
   app.enableCors({
     allowedHeaders: ['content-type'],
