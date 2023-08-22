@@ -18,14 +18,17 @@ async function bootstrap() {
     '*',
     'http://localhost:3000/home',
     'https://client-gizwe4cdh-revengemiroz.vercel.app',
-    'https://client-gizwe4cdh-revengemiroz.vercel.app//home',
+    'https://client-gizwe4cdh-revengemiroz.vercel.app/home',
   ];
   app.enableCors({
-    origin: allowedOrigins,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
   });
-
   // Start the NestJS API server
   await app.listen(apiPort, () => {
     console.log(`NestJS API server is running on port ${apiPort}`);
@@ -41,7 +44,7 @@ async function bootstrap() {
   });
 
   io.on('connection', (socket) => {
-    console.log('A user connected via Socket.IO');
+    console.log('A user connected via Socket.IO', socket.id);
     // Add your Socket.IO event listeners and logic here
   });
 

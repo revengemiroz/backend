@@ -1,58 +1,61 @@
-import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+// src/chat/chat.gateway.ts
 import {
-  MessageBody,
-  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  SubscribeMessage,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({
-  cors: {
-    origin: '*',
-  },
-})
-export class MyGateWay implements OnModuleInit {
+@WebSocketGateway()
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
-  online = {};
 
-  allUsers = [];
-  onlineIds(myId) {
-    const filter = this.allUsers.filter((user) => user !== myId);
-    // this.online.push(filter);
+  private users = new Map();
+  handleConnection(client: Socket) {
+    // Handle a new connection
+    const userId = client.id;
+    this.users.set(client.id, userId);
+    console.log('connection', client.id);
   }
 
-  onModuleInit() {
-    this.server.on('connection', (socket) => {
-      console.log('connected', socket.id);
-      this.allUsers.push(socket.id);
-      this.online[`${socket.id}_USER`] = socket.id;
-
-      socket.on('disconnect', () => {
-        console.log('disconnected user', socket.id);
-        const index = this.allUsers.indexOf(socket.id);
-        delete this.online[`${socket.id}_USER`];
-        if (index !== -1) {
-          this.allUsers.splice(index, 1);
-        }
-        console.log('users', this.allUsers, this.online);
-      });
-      // this.onlineIds(socket.id);
-
-      // this.server.emit('online', {
-      //   online: this.allUsers,
-      // });
-      console.log('users', this.allUsers, this.online);
-    });
+  handleDisconnect(client: Socket) {
+    // Handle a disconnected client
+    const userId = this.users.get(client.id);
+    if (userId) {
+      this.users.delete(client.id);
+    }
+    console.log('disconnect', this.users);
   }
 
-  @SubscribeMessage('newMessage')
-  onNewMessage(@MessageBody() body: any) {
-    console.log('!!!!!!!!!!', body);
+  @SubscribeMessage('message')
+  handleMessage(client: Socket, payload: any) {
+    // Handle received messages and broadcast to other clients
+    const userId = this.users.get(client.id);
+    console.log('wjhat is payload', payload, userId);
+    if (userId) {
+      if (client.rooms.has(payload.room)) {
+        client
+          .to(payload.room)
+          .emit('messageReceived', { user: userId, text: payload.text });
+      } else {
+        client.emit('error', {
+          message: 'you can only send if u join the room',
+        });
+      }
+    }
+  }
 
-    this.server.emit('onMessage', {
-      online: this.online,
-    });
+  @SubscribeMessage('joinRoom')
+  handleJoinRoom(client: Socket, room: string) {
+    client.join(room);
+    console.log('joined room', room);
+  }
+
+  @SubscribeMessage('leaveRoom')
+  handleLeaveRoom(client: Socket, room: string) {
+    client.leave(room);
   }
 }
