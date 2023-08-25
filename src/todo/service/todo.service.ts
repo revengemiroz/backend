@@ -6,8 +6,18 @@ import { Todo } from '@prisma/client';
 export class TodoService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllTodo(): Promise<Todo[]> {
-    return this.prisma.todo.findMany();
+  async getAllTodo(cursor): Promise<Todo[]> {
+    if (!cursor) {
+      return this.prisma.todo.findMany({ take: 5 });
+    }
+    return this.prisma.todo.findMany({
+      take: 5,
+      skip: 1,
+      cursor: { id: cursor },
+      orderBy: {
+        id: 'desc',
+      },
+    });
   }
 
   async getTodo(query: string): Promise<Todo[]> {

@@ -16,8 +16,10 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Get('all')
-  async getAllTodo(): Promise<Todo[]> {
-    return this.todoService.getAllTodo();
+  async getAllTodo(@Query('cursor') cursor: number): Promise<Todo[]> {
+    console.log('what is cursor', cursor);
+
+    return this.todoService.getAllTodo(Number(cursor));
   }
 
   @Post()
