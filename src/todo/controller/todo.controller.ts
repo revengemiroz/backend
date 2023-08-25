@@ -6,32 +6,33 @@ import {
   Body,
   Put,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { TodoService } from '../service/todo.service';
 import { Todo } from '@prisma/client';
 
-@Controller('api/v1/todo')
+@Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
-  @Get()
+  @Get('all')
   async getAllTodo(): Promise<Todo[]> {
     return this.todoService.getAllTodo();
   }
 
   @Post()
-  async createTodo(@Body() postData: Todo): Promise<Todo> {
-    return this.todoService.createTodo(postData);
+  async createTodo(@Body() todoData: Todo): Promise<Todo> {
+    return this.todoService.createTodo(todoData);
   }
 
-  @Get(':id')
-  async getTodo(@Param('id') id: number): Promise<Todo | null> {
-    return this.todoService.getTodo(id);
+  @Get('search')
+  async getTodo(@Query('query') query: string): Promise<Todo[]> {
+    return this.todoService.getTodo(query);
   }
 
   @Put(':id')
-  async Update(@Param('id') id: number): Promise<Todo> {
-    return this.todoService.updateTodo(id);
+  async Update(@Param('id') id: number, @Body() body: Todo): Promise<Todo> {
+    return this.todoService.updateTodo(id, body);
   }
 
   @Delete(':id')
