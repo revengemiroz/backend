@@ -15,7 +15,7 @@ export class TodoService {
       skip: 1,
       cursor: { id: cursor },
       orderBy: {
-        id: 'desc',
+        id: 'asc',
       },
     });
   }
