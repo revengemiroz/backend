@@ -8,14 +8,19 @@ export class TodoService {
 
   async getAllTodo(cursor): Promise<Todo[]> {
     if (!cursor) {
-      return this.prisma.todo.findMany({ take: 5 });
+      return this.prisma.todo.findMany({
+        take: 5,
+        orderBy: {
+          id: 'desc',
+        },
+      });
     }
     return this.prisma.todo.findMany({
       take: 5,
       skip: 1,
       cursor: { id: cursor },
       orderBy: {
-        id: 'asc',
+        id: 'desc',
       },
     });
   }
@@ -33,7 +38,7 @@ export class TodoService {
   async updateTodo(id: number, body: Todo): Promise<Todo> {
     return this.prisma.todo.update({
       where: { id: Number(id) },
-      data: { task: body.task, completed: body.completed },
+      data: body,
     });
   }
 
@@ -43,3 +48,6 @@ export class TodoService {
     });
   }
 }
+
+// npx prisma generate
+// npx prisma db push

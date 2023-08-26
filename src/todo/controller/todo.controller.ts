@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { TodoService } from '../service/todo.service';
 import { Todo } from '@prisma/client';
@@ -15,24 +16,26 @@ import { Todo } from '@prisma/client';
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
-  @Get('all')
-  async getAllTodo(@Query('cursor') cursor: number): Promise<Todo[]> {
-    console.log('what is cursor', cursor);
+  @Get()
+  async getAllTodo(
+    @Query('cursor') cursor: number,
+    @Query('search') search: string,
+  ): Promise<Todo[]> {
+    console.log('what is cursor', cursor, search);
 
-    return this.todoService.getAllTodo(Number(cursor));
+    if (search) {
+      return this.todoService.getTodo(search);
+    } else {
+      return this.todoService.getAllTodo(Number(cursor));
+    }
   }
-
+  //todo?search=asdad
   @Post()
   async createTodo(@Body() todoData: Todo): Promise<Todo> {
     return this.todoService.createTodo(todoData);
   }
 
-  @Get('search')
-  async getTodo(@Query('query') query: string): Promise<Todo[]> {
-    return this.todoService.getTodo(query);
-  }
-
-  @Put(':id')
+  @Patch(':id')
   async Update(@Param('id') id: number, @Body() body: Todo): Promise<Todo> {
     return this.todoService.updateTodo(id, body);
   }
