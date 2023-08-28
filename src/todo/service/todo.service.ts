@@ -25,8 +25,22 @@ export class TodoService {
     });
   }
 
-  async getTodo(query: string): Promise<Todo[]> {
-    return this.prisma.todo.findMany({ where: { task: { contains: query } } });
+  async getTodo(search: string, cursor: number): Promise<Todo[]> {
+    if (!cursor) {
+      return this.prisma.todo.findMany({
+        where: { task: { contains: search } },
+        take: 5,
+        orderBy: { id: 'desc' },
+      });
+    } else {
+      return this.prisma.todo.findMany({
+        where: { task: { contains: search } },
+        take: 5,
+        skip: 1,
+        cursor: { id: cursor },
+        orderBy: { id: 'desc' },
+      });
+    }
   }
 
   async createTodo(data: Todo): Promise<Todo> {

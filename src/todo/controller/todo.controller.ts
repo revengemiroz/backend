@@ -24,11 +24,12 @@ export class TodoController {
     console.log('what is cursor', cursor, search);
 
     if (search) {
-      return this.todoService.getTodo(search);
+      return this.todoService.getTodo(search, Number(cursor));
     } else {
       return this.todoService.getAllTodo(Number(cursor));
     }
   }
+
   //todo?search=asdad
   @Post()
   async createTodo(@Body() todoData: Todo): Promise<Todo> {
