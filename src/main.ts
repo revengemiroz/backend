@@ -3,11 +3,26 @@ import { AppModule } from './app.module';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import * as http from 'http';
 import * as socketio from 'socket.io';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common/pipes';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: console,
   });
+
+  // for class validator
+  app.useGlobalPipes(new ValidationPipe());
+
+  //swagger setup
+  const config = new DocumentBuilder()
+    .setTitle('Api Documentation')
+    .setDescription('all the apis ui')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('/', app, document);
 
   const apiPort = 4001;
   const socketIOPort = 4002; // Choose a different port for Socket.IO
