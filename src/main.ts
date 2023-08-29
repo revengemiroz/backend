@@ -30,6 +30,7 @@ async function bootstrap() {
   const allowedOrigins = [
     'http://localhost:3000',
     'https://cloudinary.com',
+    'http://localhost:3000/todo',
     'http://localhost:3000/home',
     'https://backend-4sah.onrender.com',
     'https://client-tau-sand.vercel.app',
