@@ -56,7 +56,7 @@ async function bootstrap() {
   const io = new socketio.Server(httpServer, {
     cors: {
       origin: allowedOrigins,
-      methods: ['GET', 'POST'],
+      methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     },
   });
 
