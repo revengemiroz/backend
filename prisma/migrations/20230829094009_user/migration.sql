@@ -1,8 +1,10 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "name" TEXT,
+    "hashedPassword" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "image" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -13,7 +15,7 @@ CREATE TABLE "Todo" (
     "id" SERIAL NOT NULL,
     "task" TEXT NOT NULL,
     "completed" BOOLEAN DEFAULT false,
-    "description" TEXT,
+    "description" TEXT DEFAULT '',
 
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
 );
