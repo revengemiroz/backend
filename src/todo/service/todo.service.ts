@@ -44,9 +44,10 @@ export class TodoService {
   }
 
   async createTodo(data: Todo): Promise<Todo> {
-    return this.prisma.todo.create({
+    const createdTodo = await this.prisma.todo.create({
       data,
     });
+    return createdTodo;
   }
 
   async updateTodo(id: number, body: Todo): Promise<Todo> {
