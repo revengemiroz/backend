@@ -25,7 +25,7 @@ export class TodoController {
     if (search) {
       return this.todoService.getTodo(search, Number(cursor));
     } else {
-      return this.todoService.getAllTodo(Number(cursor));
+      return this.todoService.getAllTodo(String(cursor));
     }
   }
 
