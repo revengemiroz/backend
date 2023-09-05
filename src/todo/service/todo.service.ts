@@ -6,7 +6,7 @@ import { Todo } from '@prisma/client';
 export class TodoService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllTodo(cursor: string): Promise<Todo[]> {
+  async getAllTodo(cursor): Promise<Todo[]> {
     if (!cursor) {
       return this.prisma.todo.findMany({
         take: 5,
@@ -18,7 +18,7 @@ export class TodoService {
     return this.prisma.todo.findMany({
       take: 5,
       skip: 1,
-      cursor: { id: String(cursor) },
+      cursor: { id: cursor },
       orderBy: {
         id: 'desc',
       },
@@ -37,7 +37,7 @@ export class TodoService {
         where: { task: { contains: search } },
         take: 5,
         skip: 1,
-        cursor: { id: String(cursor) },
+        cursor: { id: cursor },
         orderBy: { id: 'desc' },
       });
     }
@@ -52,14 +52,14 @@ export class TodoService {
 
   async updateTodo(id: number, body: Todo): Promise<Todo> {
     return this.prisma.todo.update({
-      where: { id: String(id) },
+      where: { id: Number(id) },
       data: body,
     });
   }
 
   async deleteTodo(id: number): Promise<Todo | undefined> {
     return this.prisma.todo.delete({
-      where: { id: String(id) },
+      where: { id: Number(id) },
     });
   }
 }
