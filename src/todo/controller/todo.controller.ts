@@ -23,9 +23,9 @@ export class TodoController {
     console.log('what is cursor', cursor, search);
 
     if (search) {
-      return this.todoService.getTodo(search, Number(cursor));
+      return this.todoService.getTodo(search, cursor);
     } else {
-      return this.todoService.getAllTodo(String(cursor));
+      return this.todoService.getAllTodo(cursor);
     }
   }
 
